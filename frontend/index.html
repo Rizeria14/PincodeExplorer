@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bangalore Pincode Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --paper:#f5f0e8;
+  --paper2:#ede8dc;
+  --paper3:#e4ddd0;
+  --ink:#2c1810;
+  --ink2:#4a3728;
+  --ink3:#7a6558;
+  --stamp-red:#b5292a;
+  --stamp-red-light:#d4544a;
+  --postmark:#1a3a5c;
+  --ochre:#c48b2f;
+  --ochre-light:#e4a83a;
+  --green-ink:#2d5a27;
+  --border-dark:#8a7060;
+  --border-light:#c8b89a;
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'Libre Baskerville',Georgia,serif;
+  --font-type:'Special Elite',monospace;
+  --font-fell:'IM Fell English',Georgia,serif;
+  --radius:2px;
+}
+
+html{background:var(--paper3);color:var(--ink)}
+body{font-family:var(--font-body);font-size:15px;line-height:1.6;min-height:100vh}
+
+
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:0.6;
+}
+
+.wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 24px}
+
+
+.site-header{
+  background:var(--stamp-red);
+  border-bottom:4px solid #8a1a1b;
+  padding:0;
+}
+.header-inner{
+  display:flex;align-items:stretch;
+  max-width:1100px;margin:0 auto;
+}
+.header-stamp{
+  background:#8a1a1b;
+  padding:16px 28px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.header-stamp .denomination{
+  font-family:var(--font-display);font-size:11px;font-weight:700;
+  color:rgba(255,255,255,0.7);letter-spacing:0.15em;text-transform:uppercase;
+  display:block;text-align:center;
+}
+.header-stamp .value{
+  font-family:var(--font-display);font-size:28px;font-weight:900;
+  color:#fff;display:block;text-align:center;line-height:1;
+}
+.header-center{
+  flex:1;padding:20px 32px;display:flex;flex-direction:column;justify-content:center;
+  border-left:2px dashed rgba(255,255,255,0.25);
+  border-right:2px dashed rgba(255,255,255,0.25);
+}
+.header-eyebrow{
+  font-family:var(--font-type);font-size:10px;color:rgba(255,255,255,0.6);
+  letter-spacing:0.18em;text-transform:uppercase;margin-bottom:4px;
+}
+.header-title{
+  font-family:var(--font-display);font-size:clamp(20px,3vw,30px);
+  font-weight:900;color:#fff;letter-spacing:-0.02em;font-style:italic;
+  line-height:1.1;
+}
+.header-subtitle{
+  font-family:var(--font-body);font-size:12px;color:rgba(255,255,255,0.65);
+  margin-top:4px;font-style:italic;
+}
+.header-postmark{
+  padding:16px 28px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.postmark-circle{
+  width:80px;height:80px;border-radius:50%;
+  border:3px solid rgba(255,255,255,0.4);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;
+}
+.postmark-circle::before,.postmark-circle::after{
+  content:'';position:absolute;left:50%;transform:translateX(-50%);
+  width:90%;height:2px;background:rgba(255,255,255,0.3);
+}
+.postmark-circle::before{top:14px}
+.postmark-circle::after{bottom:14px}
+.postmark-city{font-family:var(--font-type);font-size:9px;color:rgba(255,255,255,0.8);letter-spacing:0.12em;text-transform:uppercase}
+.postmark-year{font-family:var(--font-display);font-size:16px;font-weight:700;color:#fff;line-height:1}
+.postmark-pin{font-family:var(--font-type);font-size:8px;color:rgba(255,255,255,0.6);letter-spacing:0.08em}
+
+
+.nav-strip{
+  background:var(--paper2);
+  border-bottom:2px solid var(--border-dark);
+  padding:0;
+}
+.nav-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;padding:0 24px;
+}
+.nav-link{
+  font-family:var(--font-type);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--ink2);text-decoration:none;padding:10px 16px;
+  border-right:1px solid var(--border-light);
+  transition:background 0.15s,color 0.15s;
+  display:block;
+}
+.nav-link:hover{background:var(--paper3);color:var(--stamp-red)}
+.nav-link:first-child{border-left:1px solid var(--border-light)}
+.nav-note{
+  margin-left:auto;font-family:var(--font-type);font-size:10px;
+  color:var(--ink3);letter-spacing:0.06em;font-style:italic;
+}
+
+
+.stamp-border{
+  border:8px solid var(--paper2);
+  outline:2px solid var(--border-dark);
+  border-radius:var(--radius);
+  position:relative;
+}
+.stamp-border::before{
+  content:'';position:absolute;
+  inset:-14px;border:2px dashed var(--border-light);
+  pointer-events:none;
+}
+
+
+.section-heading{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:24px;padding-bottom:12px;
+  border-bottom:2px solid var(--border-dark);
+}
+.section-number{
+  font-family:var(--font-display);font-size:11px;font-weight:700;
+  color:#fff;background:var(--stamp-red);
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.section-title{
+  font-family:var(--font-display);font-size:20px;font-weight:700;
+  font-style:italic;color:var(--ink);
+}
+.section-sub{font-family:var(--font-body);font-size:12px;color:var(--ink3);margin-top:2px}
+
+
+.hero{
+  padding:40px 0 32px;
+  display:flex;gap:48px;align-items:flex-start;flex-wrap:wrap;
+}
+.hero-text{flex:1;min-width:260px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-type);font-size:10px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--green-ink);
+  border:1px solid var(--green-ink);padding:5px 12px;
+  margin-bottom:18px;border-radius:var(--radius);
+}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green-ink);animation:blink 1.8s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+.hero-h1{
+  font-family:var(--font-display);font-size:clamp(32px,5vw,58px);
+  font-weight:900;line-height:1.05;letter-spacing:-0.03em;
+  color:var(--ink);margin-bottom:16px;
+}
+.hero-h1 em{font-style:italic;color:var(--stamp-red)}
+.hero-p{
+  font-family:var(--font-fell);font-size:15px;color:var(--ink2);
+  line-height:1.8;max-width:480px;font-style:italic;margin-bottom:24px;
+}
+.hero-cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.btn-primary{
+  font-family:var(--font-type);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+  padding:11px 24px;background:var(--stamp-red);color:#fff;
+  text-decoration:none;border:2px solid #8a1a1b;border-radius:var(--radius);
+  transition:background 0.15s;cursor:pointer;display:inline-block;
+}
+.btn-primary:hover{background:#8a1a1b}
+.btn-secondary{
+  font-family:var(--font-type);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+  padding:11px 24px;background:transparent;color:var(--ink2);
+  text-decoration:none;border:2px solid var(--border-dark);border-radius:var(--radius);
+  transition:all 0.15s;cursor:pointer;display:inline-block;
+}
+.btn-secondary:hover{background:var(--paper3);border-color:var(--ink2)}
+
+
+.hero-sidebar{flex-shrink:0}
+.label-envelope{
+  display:inline-block;
+  font-family:var(--font-type);font-size:9px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:8px;
+}
+
+.stats-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;margin-bottom:32px;
+}
+.stat-card{
+  background:var(--paper);border:1px solid var(--border-light);
+  border-radius:var(--radius);padding:14px 16px;
+  border-left:3px solid var(--stamp-red);
+  position:relative;overflow:hidden;
+}
+.stat-card::after{
+  content:'';position:absolute;top:0;right:0;
+  width:0;height:0;
+  border-style:solid;border-width:0 20px 20px 0;
+  border-color:transparent var(--border-light) transparent transparent;
+}
+.stat-label{font-family:var(--font-type);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.stat-value{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--ink);line-height:1}
+.stat-sub{font-family:var(--font-body);font-size:11px;color:var(--ink3);font-style:italic;margin-top:4px}
+
+
+.zone-chart{
+  background:var(--paper);border:1px solid var(--border-light);
+  border-radius:var(--radius);padding:20px;
+}
+.zone-chart-title{
+  font-family:var(--font-type);font-size:9px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:16px;
+  padding-bottom:8px;border-bottom:1px dashed var(--border-light);
+}
+.zone-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.zone-label{font-family:var(--font-type);font-size:10px;color:var(--stamp-red);width:28px;flex-shrink:0;font-weight:700}
+.zone-bar-wrap{flex:1;height:8px;background:var(--paper3);border-radius:1px;overflow:hidden;position:relative}
+.zone-bar{height:100%;background:var(--stamp-red);opacity:0.7;border-radius:1px;transition:width 0.8s ease}
+.zone-count{font-family:var(--font-type);font-size:10px;color:var(--ink2);width:22px;text-align:right;flex-shrink:0}
+.zone-name{font-family:var(--font-body);font-size:10px;color:var(--ink3);font-style:italic;width:72px;flex-shrink:0}
+
+
+.lookup-grid{display:flex;gap:0;flex-wrap:wrap}
+.lookup-pane{
+  flex:1;min-width:260px;padding:28px;
+  background:var(--paper);
+}
+.lookup-pane:first-child{border-right:2px dashed var(--border-light)}
+.lookup-pane-head{
+  display:flex;align-items:center;gap:10px;margin-bottom:18px;
+}
+.lookup-pane-icon{
+  width:28px;height:28px;border:1px solid var(--border-dark);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--ink2);flex-shrink:0;
+  border-radius:var(--radius);
+  font-family:var(--font-type);font-weight:700;
+}
+.lookup-pane-label{
+  font-family:var(--font-type);font-size:10px;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--ink3);
+}
+.lookup-pane-arrow{color:var(--stamp-red);font-family:var(--font-type)}
+
+
+.field-input{
+  width:100%;
+  font-family:var(--font-type);font-size:20px;
+  padding:12px 14px;
+  background:var(--paper2);color:var(--ink);
+  border:2px solid var(--border-dark);border-radius:var(--radius);
+  outline:none;letter-spacing:0.1em;
+  transition:border-color 0.15s,background 0.15s;
+}
+.field-input:focus{border-color:var(--stamp-red);background:var(--paper)}
+.field-input::placeholder{color:var(--ink3);font-size:16px;letter-spacing:0.06em}
+.field-wrap{position:relative}
+
+.result-card{
+  margin-top:16px;
+  background:var(--paper);border:1px solid var(--border-light);
+  border-radius:var(--radius);
+  border-left:4px solid var(--stamp-red);
+  padding:18px 20px;
+  animation:slide-in 0.25s ease;
+}
+@keyframes slide-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.result-area{
+  font-family:var(--font-display);font-size:22px;font-weight:700;
+  font-style:italic;color:var(--ink);margin-bottom:8px;
+}
+.zone-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--font-type);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+  padding:4px 10px;border:1px solid;border-radius:1px;
+}
+
+
+.zone-N{color:#1a3a5c;border-color:#1a3a5c;background:rgba(26,58,92,0.08)}
+.zone-S{color:#2d5a27;border-color:#2d5a27;background:rgba(45,90,39,0.08)}
+.zone-E{color:#8a4a0a;border-color:#8a4a0a;background:rgba(138,74,10,0.08)}
+.zone-W{color:#6b2c7e;border-color:#6b2c7e;background:rgba(107,44,126,0.08)}
+.zone-C{color:#b5292a;border-color:#b5292a;background:rgba(181,41,42,0.08)}
+.zone-NE,.zone-NW,.zone-SE,.zone-SW{color:#4a4a4a;border-color:#8a7060;background:rgba(100,80,60,0.08)}
+
+.result-landmark{font-family:var(--font-body);font-size:12px;color:var(--ink3);font-style:italic;margin-top:6px}
+
+.copy-row{display:flex;gap:8px;margin-top:12px}
+.copy-btn{
+  font-family:var(--font-type);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:5px 12px;background:transparent;color:var(--ink2);
+  border:1px solid var(--border-dark);border-radius:var(--radius);cursor:pointer;
+  transition:all 0.15s;
+}
+.copy-btn:hover{background:var(--paper3);color:var(--stamp-red);border-color:var(--stamp-red)}
+.copy-btn.copied{background:var(--green-ink);color:#fff;border-color:var(--green-ink)}
+
+.po-section{margin-top:16px;padding-top:16px;border-top:1px dashed var(--border-light)}
+.po-label{font-family:var(--font-type);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
+.po-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--paper3);font-size:12px}
+.po-name{color:var(--ink2);font-family:var(--font-body)}
+.po-type{color:var(--ink3);font-style:italic;font-size:11px}
+.live-badge{
+  display:inline-block;font-family:var(--font-type);font-size:9px;
+  letter-spacing:0.08em;text-transform:uppercase;
+  padding:2px 6px;border-radius:1px;margin-left:8px;
+}
+.live-badge.cached{background:rgba(196,139,47,0.15);color:var(--ochre)}
+.live-badge.live{background:rgba(45,90,39,0.12);color:var(--green-ink)}
+
+.hint-text{font-family:var(--font-type);font-size:11px;color:var(--ink3);margin-top:8px;letter-spacing:0.04em}
+.error-msg{
+  margin-top:10px;padding:10px 14px;
+  background:rgba(181,41,42,0.06);border:1px solid rgba(181,41,42,0.3);
+  border-radius:var(--radius);
+  font-family:var(--font-body);font-size:12px;color:var(--stamp-red);font-style:italic;
+}
+
+
+.area-results{
+  margin-top:14px;
+  border:1px solid var(--border-light);border-radius:var(--radius);
+  overflow:hidden;background:var(--paper);
+  animation:slide-in 0.25s ease;
+}
+.area-row{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;
+  border-bottom:1px dashed var(--border-light);cursor:pointer;
+  transition:background 0.1s;
+}
+.area-row:last-child{border-bottom:none}
+.area-row:hover{background:var(--paper2)}
+.area-row-name{font-family:var(--font-display);font-size:14px;font-weight:700;font-style:italic;flex:1;color:var(--ink)}
+.area-row-lm{font-family:var(--font-body);font-size:11px;color:var(--ink3);font-style:italic}
+.area-row-pin{font-family:var(--font-type);font-size:16px;font-weight:700;color:var(--stamp-red)}
+.more-note{font-family:var(--font-type);font-size:10px;text-align:center;color:var(--ink3);padding:10px;letter-spacing:0.06em}
+
+
+.filter-row{
+  display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px;
+}
+.filter-search{
+  flex:1;min-width:180px;max-width:300px;
+  font-family:var(--font-type);font-size:13px;
+  padding:9px 12px;
+  background:var(--paper);color:var(--ink);
+  border:2px solid var(--border-dark);border-radius:var(--radius);
+  outline:none;letter-spacing:0.06em;
+  transition:border-color 0.15s;
+}
+.filter-search:focus{border-color:var(--stamp-red)}
+
+.zone-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.zone-filter-label{font-family:var(--font-type);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3)}
+.zone-chip-btn{
+  font-family:var(--font-type);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;
+  padding:4px 10px;border:1px solid var(--border-dark);border-radius:1px;cursor:pointer;
+  background:transparent;color:var(--ink2);transition:all 0.12s;
+}
+.zone-chip-btn.active{background:var(--stamp-red);color:#fff;border-color:#8a1a1b}
+.zone-chip-btn:hover:not(.active){background:var(--paper2);border-color:var(--stamp-red);color:var(--stamp-red)}
+
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{
+  font-family:var(--font-type);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
+  text-align:left;padding:10px 14px;color:var(--ink3);
+  border-bottom:2px solid var(--border-dark);cursor:pointer;white-space:nowrap;
+  background:var(--paper2);user-select:none;transition:color 0.12s;
+}
+.data-table th:hover,.data-table th.sorted{color:var(--stamp-red)}
+.data-table th .sort-icon{margin-left:4px;opacity:0.4}
+.data-table th.sorted .sort-icon{opacity:1}
+.data-table tr{border-bottom:1px dashed var(--border-light);transition:background 0.1s}
+.data-table tr:hover td{background:var(--paper2)}
+.data-table td{padding:10px 14px;color:var(--ink2);vertical-align:middle}
+.td-pin{font-family:var(--font-type);font-size:14px;font-weight:700;color:var(--stamp-red)}
+.td-area{font-family:var(--font-display);font-size:14px;font-style:italic;color:var(--ink)}
+.td-landmark{font-family:var(--font-body);font-size:11px;color:var(--ink3);font-style:italic}
+.td-copy{
+  font-family:var(--font-type);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:3px 8px;background:transparent;color:var(--ink3);
+  border:1px solid var(--border-light);border-radius:1px;cursor:pointer;
+  transition:all 0.12s;white-space:nowrap;
+}
+.td-copy:hover{background:var(--paper3);color:var(--stamp-red);border-color:var(--stamp-red)}
+.td-copy.copied{background:var(--green-ink);color:#fff;border-color:var(--green-ink)}
+
+
+.pagination{display:flex;align-items:center;gap:8px;justify-content:center;padding:20px 0}
+.page-btn{
+  font-family:var(--font-type);font-size:10px;letter-spacing:0.06em;text-transform:uppercase;
+  padding:6px 14px;background:transparent;color:var(--ink2);
+  border:1px solid var(--border-dark);border-radius:1px;cursor:pointer;
+  transition:all 0.12s;
+}
+.page-btn:hover:not(:disabled){background:var(--paper2);color:var(--stamp-red);border-color:var(--stamp-red)}
+.page-btn:disabled{opacity:0.35;cursor:default}
+.page-btn.active{background:var(--stamp-red);color:#fff;border-color:#8a1a1b}
+.page-info{font-family:var(--font-type);font-size:10px;color:var(--ink3);letter-spacing:0.06em}
+
+
+.endpoint{
+  border:1px solid var(--border-light);border-radius:var(--radius);
+  margin-bottom:8px;overflow:hidden;
+}
+.endpoint-head{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;
+  cursor:pointer;background:var(--paper);
+  transition:background 0.12s;user-select:none;
+}
+.endpoint-head:hover{background:var(--paper2)}
+.method-badge{
+  font-family:var(--font-type);font-size:10px;letter-spacing:0.1em;
+  padding:3px 8px;border-radius:1px;font-weight:700;flex-shrink:0;
+}
+.method-GET{background:rgba(45,90,39,0.12);color:var(--green-ink);border:1px solid rgba(45,90,39,0.3)}
+.method-POST{background:rgba(26,58,92,0.1);color:var(--postmark);border:1px solid rgba(26,58,92,0.25)}
+.endpoint-path{font-family:var(--font-type);font-size:13px;color:var(--ink);letter-spacing:0.04em;flex:1}
+.endpoint-desc{font-family:var(--font-body);font-size:12px;color:var(--ink3);font-style:italic}
+.endpoint-arrow{font-family:var(--font-type);color:var(--ink3);font-size:12px;transition:transform 0.15s}
+.endpoint-head.open .endpoint-arrow{transform:rotate(180deg)}
+.endpoint-body{
+  padding:16px;border-top:1px dashed var(--border-light);
+  background:var(--paper2);display:none;
+}
+.endpoint-body.visible{display:block;animation:slide-in 0.2s ease}
+.param-table{width:100%;font-size:12px;border-collapse:collapse;margin-bottom:14px}
+.param-table th{
+  font-family:var(--font-type);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--ink3);padding:6px 8px;border-bottom:1px dashed var(--border-light);text-align:left;
+}
+.param-table td{padding:6px 8px;color:var(--ink2);vertical-align:top;border-bottom:1px dashed var(--paper3)}
+.param-name{font-family:var(--font-type);font-size:11px;color:var(--stamp-red)}
+.param-type{font-family:var(--font-type);font-size:10px;color:var(--ochre)}
+.resp-code{
+  font-family:'Courier New',monospace;font-size:11px;color:var(--green-ink);
+  background:var(--ink);padding:12px;border-radius:var(--radius);
+  white-space:pre-wrap;line-height:1.5;
+}
+
+
+.spinner{
+  width:16px;height:16px;border:2px solid var(--border-light);
+  border-top-color:var(--stamp-red);border-radius:50%;
+  animation:spin 0.7s linear infinite;display:inline-block;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin-wrap{position:absolute;right:14px;top:50%;transform:translateY(-50%)}
+
+
+.site-footer{
+  border-top:3px double var(--border-dark);
+  padding:28px 24px;text-align:center;margin-top:64px;
+  background:var(--paper2);
+}
+.footer-text{
+  font-family:var(--font-type);font-size:10px;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--ink3);
+}
+.footer-divider{margin:0 12px}
+
+
+.section{margin-bottom:56px}
+
+
+.stamp-section{
+  position:relative;
+  padding:28px;
+  background:var(--paper);
+  border:1px solid var(--border-light);
+  border-radius:var(--radius);
+}
+.stamp-section::before,.stamp-section::after{
+  content:'';position:absolute;
+  width:12px;height:12px;
+  border-color:var(--stamp-red);border-style:solid;
+}
+.stamp-section::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.stamp-section::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+</style>
+</head>
+<body>
+
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-center">
+      <div class="header-title">Bangalore Pincode Explorer</div>
+    </div>
+    <div class="header-postmark">
+    </div>
+  </div>
+</header>
+
+
+<nav class="nav-strip">
+  <div class="nav-inner">
+    <a href="#lookup" class="nav-link">Lookup</a>
+    <a href="#browse" class="nav-link">Browse</a>
+    <a href="#api-docs" class="nav-link">API Reference</a>
+    <span class="nav-note">Rate limit: 100 req / 15 min</span>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Karnataka · India Post Network · Live Data
+      </div>
+      <h1 class="hero-h1">Search any<br/><em>Bangalore</em><br/>Postcode.</h1>
+      <p class="hero-p">
+        A full-stack pincode directory for Bangalore city — look up any 6-digit code or area name,
+        instantly cross-referenced against the live India Post database.
+      </p>
+      <div class="hero-cta-row">
+        <a href="#lookup" class="btn-primary">Search Pincodes →</a>
+        <a href="#api-docs" class="btn-secondary">API Reference</a>
+      </div>
+    </div>
+
+    
+    <div class="hero-sidebar" id="quick-stats">
+      <div class="label-envelope">At a glance</div>
+      <div style="display:flex;flex-direction:column;gap:0;border:1px solid var(--border-dark)">
+        <div style="padding:14px 20px;border-bottom:1px dashed var(--border-light);display:flex;justify-content:space-between;align-items:baseline;gap:32px">
+          <span style="font-family:var(--font-type);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3)">Total Pincodes</span>
+          <span style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--ink)" id="qs-total">—</span>
+        </div>
+        <div style="padding:14px 20px;border-bottom:1px dashed var(--border-light);display:flex;justify-content:space-between;align-items:baseline;gap:32px">
+          <span style="font-family:var(--font-type);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3)">Zones</span>
+          <span style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--ink)" id="qs-zones">—</span>
+        </div>
+        <div style="padding:14px 20px;border-bottom:1px dashed var(--border-light);display:flex;justify-content:space-between;align-items:baseline;gap:32px">
+          <span style="font-family:var(--font-type);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3)">From</span>
+          <span style="font-family:var(--font-type);font-size:16px;font-weight:700;color:var(--stamp-red)" id="qs-from">—</span>
+        </div>
+        <div style="padding:14px 20px;border-bottom:1px dashed var(--border-light);display:flex;justify-content:space-between;align-items:baseline;gap:32px">
+          <span style="font-family:var(--font-type);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3)">To</span>
+          <span style="font-family:var(--font-type);font-size:16px;font-weight:700;color:var(--stamp-red)" id="qs-to">—</span>
+        </div>
+        <div style="padding:14px 20px;display:flex;justify-content:space-between;align-items:baseline;gap:32px">
+          <span style="font-family:var(--font-type);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3)">Cache Hits</span>
+          <span style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--ink)" id="qs-cache">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="section">
+    <div class="section-heading">
+      <div class="section-number">§</div>
+      <div>
+        <div class="section-title">Zone Distribution</div>
+        <div class="section-sub">Pincode density across all Bangalore postal zones</div>
+      </div>
+    </div>
+    <div class="zone-chart" id="zone-chart">
+      <div class="zone-chart-title">Loading distribution…</div>
+    </div>
+  </div>
+
+  
+  <div class="section" id="lookup">
+    <div class="section-heading">
+      <div class="section-number">§</div>
+      <div>
+        <div class="section-title">Instant Lookup</div>
+        <div class="section-sub">Search by 6-digit pincode or area name · Live India Post data</div>
+      </div>
+    </div>
+    <div class="stamp-section">
+      <div class="lookup-grid">
+
+        
+        <div class="lookup-pane">
+          <div class="lookup-pane-head">
+            <div class="lookup-pane-icon">##</div>
+            <div>
+              <div class="lookup-pane-label">Pincode <span class="lookup-pane-arrow">→</span> Area</div>
+            </div>
+          </div>
+          <div class="field-wrap">
+            <input id="pin-input" class="field-input" type="text" maxlength="6" placeholder="560041" autocomplete="off" inputmode="numeric"/>
+            <span class="spin-wrap" id="pin-spinner" style="display:none"><span class="spinner"></span></span>
+          </div>
+          <div id="pin-hint" class="hint-text" style="display:none"></div>
+          <div id="pin-error" class="error-msg" style="display:none"></div>
+          <div id="pin-result" style="display:none"></div>
+        </div>
+
+        
+        <div class="lookup-pane">
+          <div class="lookup-pane-head">
+            <div class="lookup-pane-icon" style="font-size:12px">◎</div>
+            <div>
+              <div class="lookup-pane-label">Area <span class="lookup-pane-arrow">→</span> Pincode</div>
+            </div>
+          </div>
+          <div class="field-wrap">
+            <input id="area-input" class="field-input" type="text" placeholder="Koramangala, Whitefield…" autocomplete="off"/>
+            <span class="spin-wrap" id="area-spinner" style="display:none"><span class="spinner"></span></span>
+          </div>
+          <div id="area-error" class="error-msg" style="display:none"></div>
+          <div id="area-result" style="display:none"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="section" id="browse">
+    <div class="section-heading">
+      <div class="section-number">§</div>
+      <div>
+        <div class="section-title">Browse All Pincodes</div>
+        <div class="section-sub">Filter by zone · search all fields · sort any column</div>
+      </div>
+    </div>
+
+    <div class="filter-row">
+      <input id="table-search" class="filter-search" type="text" placeholder="Search pin, area, landmark…"/>
+      <div class="zone-chips">
+        <span class="zone-filter-label">Zone:</span>
+        <div id="zone-chips-wrap"></div>
+      </div>
+    </div>
+
+    <div class="stamp-section" style="padding:0;overflow:hidden">
+      <div id="table-loading" style="padding:32px;text-align:center;font-family:var(--font-type);font-size:11px;letter-spacing:0.1em;color:var(--ink3)">Loading records…</div>
+      <table class="data-table" id="main-table" style="display:none">
+        <thead>
+          <tr>
+            <th data-col="pin" class="sorted">Pincode <span class="sort-icon">↑</span></th>
+            <th data-col="area">Area <span class="sort-icon">⇅</span></th>
+            <th data-col="zone">Zone <span class="sort-icon">⇅</span></th>
+            <th>Landmark</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+      <div id="table-error" class="error-msg" style="display:none;margin:16px"></div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+
+  
+  <div class="section" id="api-docs">
+    <div class="section-heading">
+      <div class="section-number">§</div>
+      <div>
+        <div class="section-title">API Reference</div>
+        <div class="section-sub">RESTful endpoints · Rate limited to 100 req / 15 min per IP</div>
+      </div>
+    </div>
+
+    <div class="stamp-section">
+      <p style="font-family:var(--font-fell);font-size:14px;color:var(--ink2);font-style:italic;margin-bottom:20px;line-height:1.8">
+        Base URL: <code style="font-family:var(--font-type);color:var(--stamp-red);background:rgba(181,41,42,0.08);padding:2px 8px;border-radius:1px;font-size:12px">http://localhost:5000</code>
+      </p>
+      <div id="api-endpoints"></div>
+    </div>
+  </div>
+
+</div>
+
+
+<footer class="site-footer">
+  <div class="footer-text">
+    Bangalore Pincode Explorer
+    <span class="footer-divider">·</span>
+    Node.js + Express + React
+    <span class="footer-divider">·</span>
+    Data: India Post API
+    <span class="footer-divider">·</span>
+    Karnataka Postal Circle
+  </div>
+</footer>
+
+<script>
+const BASE = '/api';
+
+async function apiFetch(path, params) {
+  try {
+    let url = BASE + path;
+    if (params) {
+      const q = new URLSearchParams(params);
+      url += '?' + q;
+    }
+    const r = await fetch(url, {signal: AbortSignal.timeout(10000)});
+    if (!r.ok) {
+      const j = await r.json().catch(() => ({}));
+      throw new Error(j.error || 'Request failed');
+    }
+    return r.json();
+  } catch(e) {
+    if (e.name === 'TimeoutError') throw new Error('Request timed out');
+    if (e.message.includes('fetch') || e.message.includes('network')) throw new Error('Network error — is the backend running?');
+    throw e;
+  }
+}
+
+function debounce(fn, delay) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), delay); };
+}
+
+function zoneChip(zone, showLabel) {
+  const labels = {N:'North',S:'South',E:'East',W:'West',C:'Central',NE:'North East',NW:'North West',SE:'South East',SW:'South West'};
+  const cls = zone.length > 1 ? 'zone-NE' : `zone-${zone}`;
+  return `<span class="zone-chip ${cls}">${zone}${showLabel && labels[zone] ? ' · ' + labels[zone] : ''}</span>`;
+}
+
+function copyToClipboard(text, btn) {
+  navigator.clipboard?.writeText(text).catch(() => {});
+  btn.classList.add('copied');
+  const orig = btn.textContent;
+  btn.textContent = 'Copied!';
+  setTimeout(() => { btn.classList.remove('copied'); btn.textContent = orig; }, 1500);
+}
+
+
+async function loadStats() {
+  try {
+    const d = await apiFetch('/stats');
+    document.getElementById('qs-total').textContent = d.totalPincodes ?? '—';
+    document.getElementById('qs-zones').textContent = d.totalZones ?? '—';
+    document.getElementById('qs-from').textContent = d.range?.from ?? '—';
+    document.getElementById('qs-to').textContent = d.range?.to ?? '—';
+    document.getElementById('qs-cache').textContent = d.cacheSize ?? '—';
+
+    
+    const zones = d.zones || {};
+    const entries = Object.entries(zones).sort((a,b) => b[1] - a[1]);
+    const maxCount = Math.max(...entries.map(e => e[1]), 1);
+    const zoneNames = {N:'North',S:'South',E:'East',W:'West',C:'Central',NE:'North East',NW:'North West',SE:'South East',SW:'South West'};
+    const chart = document.getElementById('zone-chart');
+    chart.innerHTML = `<div class="zone-chart-title">Pincode distribution by zone</div>` +
+      entries.map(([z, c]) =>
+        `<div class="zone-row">
+          <div class="zone-label">${z}</div>
+          <div class="zone-bar-wrap"><div class="zone-bar" style="width:0%" data-pct="${(c/maxCount*100).toFixed(1)}"></div></div>
+          <div class="zone-count">${c}</div>
+          <div class="zone-name">${zoneNames[z] || z}</div>
+        </div>`
+      ).join('');
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.zone-bar').forEach(b => {
+        b.style.width = b.dataset.pct + '%';
+      });
+    });
+  } catch(e) {
+    document.getElementById('zone-chart').innerHTML = `<div style="font-family:var(--font-type);font-size:11px;color:var(--ink3)">Could not load stats — ${e.message}</div>`;
+  }
+}
+loadStats();
+
+
+const pinInput = document.getElementById('pin-input');
+const pinSpinner = document.getElementById('pin-spinner');
+const pinHint = document.getElementById('pin-hint');
+const pinError = document.getElementById('pin-error');
+const pinResult = document.getElementById('pin-result');
+
+function renderPinResult(d) {
+  let html = `<div class="result-card">`;
+  if (d.local) {
+    html += `<div class="result-area">${d.local.area}</div>`;
+    html += `<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px">
+      ${zoneChip(d.local.zone, true)}
+      <span class="result-landmark">◎ ${d.local.landmark}</span>
+    </div>`;
+    html += `<div class="copy-row">
+      <button class="copy-btn" onclick="copyToClipboard('${d.pincode}', this)">Copy PIN</button>
+      <button class="copy-btn" onclick="copyToClipboard('${d.local.area.replace(/'/g,"\\'")}', this)">Copy Area</button>
+    </div>`;
+  }
+  if (d.official?.postOffices?.length > 0) {
+    const src = d.official.source === 'cache' ? 'cached' : 'live';
+    html += `<div class="po-section">
+      <div class="po-label">India Post Data <span class="live-badge ${src}">${src}</span></div>
+      ${d.official.postOffices.slice(0,3).map(po =>
+        `<div class="po-row"><span class="po-name">${po.name}</span><span class="po-type">${po.branchType}</span></div>`
+      ).join('')}
+      ${d.official.postOffices.length > 3 ? `<div class="hint-text" style="margin-top:6px">+${d.official.postOffices.length-3} more offices</div>` : ''}
+    </div>`;
+  }
+  if (d.note) html += `<div class="hint-text" style="margin-top:8px">${d.note}</div>`;
+  html += `</div>`;
+  return html;
+}
+
+const debouncedPinLookup = debounce(async (pin) => {
+  if (!/^\d{6}$/.test(pin)) return;
+  pinSpinner.style.display = '';
+  pinError.style.display = 'none';
+  pinResult.style.display = 'none';
+  try {
+    const d = await apiFetch(`/pincode/${pin}`);
+    pinResult.innerHTML = renderPinResult(d);
+    pinResult.style.display = '';
+  } catch(e) {
+    pinError.textContent = e.message;
+    pinError.style.display = '';
+  } finally {
+    pinSpinner.style.display = 'none';
+  }
+}, 400);
+
+pinInput.addEventListener('input', (e) => {
+  const val = e.target.value.replace(/\D/g,'').slice(0,6);
+  e.target.value = val;
+  pinHint.style.display = val.length > 0 && val.length < 6 ? '' : 'none';
+  pinHint.textContent = `${6 - val.length} more digit${val.length < 5 ? 's' : ''} needed`;
+  if (val.length < 6) { pinResult.style.display = 'none'; pinError.style.display = 'none'; }
+  debouncedPinLookup(val);
+});
+
+
+const areaInput = document.getElementById('area-input');
+const areaSpinner = document.getElementById('area-spinner');
+const areaError = document.getElementById('area-error');
+const areaResult = document.getElementById('area-result');
+
+function renderAreaResult(d) {
+  if (!d.results?.length) {
+    return `<div style="padding:16px;text-align:center;font-family:var(--font-fell);font-size:14px;color:var(--ink3);font-style:italic">No results found.</div>`;
+  }
+  return `<div class="area-results">
+    ${d.results.slice(0,6).map(r =>
+      `<div class="area-row">
+        <div>${zoneChip(r.zone)}</div>
+        <div style="flex:1">
+          <div class="area-row-name">${r.area}</div>
+          <div class="area-row-lm">◎ ${r.landmark}</div>
+        </div>
+        <div class="area-row-pin">${r.pin}</div>
+        <button class="copy-btn" onclick="copyToClipboard('${r.pin}', this)">Copy</button>
+      </div>`
+    ).join('')}
+    ${d.results.length > 6 ? `<div class="more-note">+${d.results.length-6} more — browse the table below</div>` : ''}
+  </div>`;
+}
+
+const debouncedAreaSearch = debounce(async (q) => {
+  if (q.trim().length < 2) return;
+  areaSpinner.style.display = '';
+  areaError.style.display = 'none';
+  areaResult.style.display = 'none';
+  try {
+    const d = await apiFetch('/search/area', {q: q.trim()});
+    areaResult.innerHTML = renderAreaResult(d);
+    areaResult.style.display = '';
+  } catch(e) {
+    areaError.textContent = e.message;
+    areaError.style.display = '';
+  } finally {
+    areaSpinner.style.display = 'none';
+  }
+}, 350);
+
+areaInput.addEventListener('input', (e) => {
+  const val = e.target.value;
+  if (val.trim().length < 2) { areaResult.style.display = 'none'; areaError.style.display = 'none'; }
+  debouncedAreaSearch(val);
+});
+
+
+let tableState = { zone: 'all', search: '', sort: 'pin', order: 'asc', page: 1, limit: 15 };
+let zonesData = null;
+
+async function loadZones() {
+  try {
+    zonesData = await apiFetch('/zones');
+    renderZoneChips();
+  } catch(e) {}
+}
+
+function renderZoneChips() {
+  const wrap = document.getElementById('zone-chips-wrap');
+  if (!wrap) return;
+  const items = [{zone:'all', label:'All', count: zonesData?.total || 0}, ...(zonesData?.zones || [])];
+  wrap.innerHTML = items.map(z => {
+    const key = z.zone || 'all';
+    const label = key === 'all' ? `All (${z.count || ''})` : `${key} (${z.count || ''})`;
+    return `<button class="zone-chip-btn ${tableState.zone === key ? 'active' : ''}" data-zone="${key}">${label}</button>`;
+  }).join('');
+  wrap.querySelectorAll('.zone-chip-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      tableState.zone = btn.dataset.zone;
+      tableState.page = 1;
+      loadTable();
+      wrap.querySelectorAll('.zone-chip-btn').forEach(b => b.classList.toggle('active', b.dataset.zone === tableState.zone));
+    });
+  });
+}
+
+async function loadTable() {
+  const loading = document.getElementById('table-loading');
+  const table = document.getElementById('main-table');
+  const err = document.getElementById('table-error');
+  loading.style.display = '';
+  table.style.display = 'none';
+  err.style.display = 'none';
+
+  try {
+    const params = {...tableState};
+    if (params.zone === 'all') delete params.zone;
+    const d = await apiFetch('/pincodes', params);
+    const rows = d.data || [];
+    const meta = d.meta || {};
+
+    const tbody = document.getElementById('table-body');
+    tbody.innerHTML = rows.map(r =>
+      `<tr>
+        <td class="td-pin">${r.pin}</td>
+        <td class="td-area">${r.area}</td>
+        <td>${zoneChip(r.zone)}</td>
+        <td class="td-landmark">${r.landmark || '—'}</td>
+        <td><button class="td-copy" onclick="copyToClipboard('${r.pin}', this)">Copy PIN</button></td>
+      </tr>`
+    ).join('');
+
+    table.style.display = '';
+    loading.style.display = 'none';
+
+    
+    document.querySelectorAll('.data-table th[data-col]').forEach(th => {
+      th.className = th.dataset.col === tableState.sort ? 'sorted' : '';
+      const icon = th.querySelector('.sort-icon');
+      if (icon) icon.textContent = th.dataset.col === tableState.sort ? (tableState.order === 'asc' ? '↑' : '↓') : '⇅';
+    });
+
+    
+    const totalPages = meta.totalPages || 1;
+    const pg = document.getElementById('pagination');
+    let pgHtml = `<span class="page-info">Page ${meta.page} of ${totalPages} · ${meta.total || 0} records</span>`;
+    pgHtml += `<button class="page-btn" onclick="goPage(${tableState.page-1})" ${tableState.page <= 1 ? 'disabled' : ''}>← Prev</button>`;
+    const start = Math.max(1, tableState.page - 2);
+    const end = Math.min(totalPages, start + 4);
+    for (let i = start; i <= end; i++) {
+      pgHtml += `<button class="page-btn ${i === tableState.page ? 'active' : ''}" onclick="goPage(${i})">${i}</button>`;
+    }
+    pgHtml += `<button class="page-btn" onclick="goPage(${tableState.page+1})" ${tableState.page >= totalPages ? 'disabled' : ''}>Next →</button>`;
+    pg.innerHTML = pgHtml;
+
+  } catch(e) {
+    loading.style.display = 'none';
+    err.textContent = e.message;
+    err.style.display = '';
+  }
+}
+
+function goPage(p) {
+  tableState.page = p;
+  loadTable();
+  document.getElementById('browse').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+document.querySelectorAll('.data-table th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    if (tableState.sort === th.dataset.col) tableState.order = tableState.order === 'asc' ? 'desc' : 'asc';
+    else { tableState.sort = th.dataset.col; tableState.order = 'asc'; }
+    tableState.page = 1;
+    loadTable();
+  });
+});
+
+const tableSearchEl = document.getElementById('table-search');
+if (tableSearchEl) {
+  tableSearchEl.addEventListener('input', debounce((e) => {
+    tableState.search = e.target.value;
+    tableState.page = 1;
+    loadTable();
+  }, 300));
+}
+
+loadZones();
+loadTable();
+
+
+const ENDPOINTS = [
+  {method:'GET', path:'/api/health', desc:'Server health check', response:`{ "status": "ok", "timestamp": "...", "uptime": 123.4 }`},
+  {method:'GET', path:'/api/pincodes', desc:'List all pincodes with filters', params:[
+    {name:'zone', type:'string', desc:'Zone code e.g. "SE", "N". Default: all'},
+    {name:'search', type:'string', desc:'Search term across pin, area, landmark'},
+    {name:'page', type:'number', desc:'Page number (default: 1)'},
+    {name:'limit', type:'number', desc:'Items per page (max 100, default: 20)'},
+    {name:'sort', type:'string', desc:'Sort field: "pin" | "area" | "zone"'},
+    {name:'order', type:'string', desc:'"asc" | "desc" (default: asc)'},
+  ], response:`{ "data": [...], "meta": { "total": 100, "page": 1, "limit": 20, "totalPages": 5 } }`},
+  {method:'GET', path:'/api/pincode/:pin', desc:'Lookup a single pincode — hits India Post API live', params:[
+    {name:'pin', type:'path', desc:'6-digit pincode e.g. 560041'}
+  ], response:`{ "pincode":"560041", "local": {...}, "official": { "postOffices":[...], "source":"api|cache" } }`},
+  {method:'GET', path:'/api/search/area', desc:'Search by area or landmark name', params:[
+    {name:'q', type:'string', desc:'Area name (min 2 chars)'}
+  ], response:`{ "query":"koramangala", "results": [...], "count": 2 }`},
+  {method:'GET', path:'/api/zones', desc:'List all zones with pincode counts', response:`{ "zones": [{ "zone":"SE", "label":"South East", "count":12 }], "total": 100 }`},
+  {method:'GET', path:'/api/stats', desc:'Dashboard statistics', response:`{ "totalPincodes":100, "totalZones":9, "range":{...}, "cacheSize":5, "zones":{...} }`},
+];
+
+const docsWrap = document.getElementById('api-endpoints');
+docsWrap.innerHTML = ENDPOINTS.map((ep, i) => `
+  <div class="endpoint">
+    <div class="endpoint-head" id="ep-head-${i}" onclick="toggleEp(${i})">
+      <span class="method-badge method-${ep.method}">${ep.method}</span>
+      <span class="endpoint-path">${ep.path}</span>
+      <span class="endpoint-desc">${ep.desc}</span>
+      <span class="endpoint-arrow">▾</span>
+    </div>
+    <div class="endpoint-body" id="ep-body-${i}">
+      ${ep.params ? `
+        <div style="font-family:var(--font-type);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px">Parameters</div>
+        <table class="param-table">
+          <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>${ep.params.map(p => `<tr>
+            <td class="param-name">${p.name}</td>
+            <td class="param-type">${p.type}</td>
+            <td style="color:var(--ink2);font-family:var(--font-body);font-size:12px">${p.desc}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      ` : ''}
+      <div style="font-family:var(--font-type);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px">Example Response</div>
+      <pre class="resp-code">${ep.response}</pre>
+    </div>
+  </div>
+`).join('');
+
+function toggleEp(i) {
+  const head = document.getElementById(`ep-head-${i}`);
+  const body = document.getElementById(`ep-body-${i}`);
+  const open = head.classList.toggle('open');
+  body.classList.toggle('visible', open);
+}
+</script>
+</body>
+</html>
